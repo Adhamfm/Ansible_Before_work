@@ -1,0 +1,22 @@
+version: 2.1
+
+default_docker: &default_docker
+  docker:
+      - image: circleci/node:13.8.0
+
+jobs:
+  save_hello_world_output:
+    <<: *default_docker
+    steps:
+      - run:
+          command: |
+            return 1
+      - run:
+          command: echo we failed my bois
+          when: on_fail
+
+
+workflows:
+  sharing-files:
+    jobs:
+      - save_hello_world_output
