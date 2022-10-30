@@ -10,7 +10,7 @@ jobs:
     steps:
       - run:
           command: |
-            return 1
+            echo every thing is working brothers dont worry
       - run:
           command: echo we failed my bois
           when: on_fail
