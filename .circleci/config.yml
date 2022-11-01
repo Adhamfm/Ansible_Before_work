@@ -4,6 +4,15 @@ default_docker: &default_docker
   docker:
       - image: circleci/node:13.8.0
 
+commands:
+  destroy_environment: # just a name
+    steps:
+      - run:
+          name: Destroy Environment
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name prod-${CIRCLE_WORKFLOW_ID:0:7}
+
 jobs:
   create_infrastructure:
     docker:
@@ -15,7 +24,7 @@ jobs:
           command: |
             aws cloudformation deploy \
                 --template-file template.yml \
-                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
                 --region us-east-1
   
   configure_infrastructure:
@@ -34,25 +43,21 @@ jobs:
           command: |
             ansible-playbook main-remote.yml -i inventory.txt
   
-  smoke_test:
+  smoke_test: # intentionally fail
     docker:
       - image: alpine:latest
     steps:
-      - run: apk add --update curl
+      # - run: apk add --update curl
       - run:
           name: smoke test
           command: |
-            URL="https://blog.udacity.com"
-            # test if site exists
-            if curl -s --head ${URL}
-            then
-              echo it works
-              return 0
-            else
-              return 1
-            fi
+            return 1
+      - destroy_environment
 
 workflows:
   continuous-delivery:
     jobs:
-      - smoke_test
+      - create_infrastructure
+      - smoke_test:
+          requires:
+            create_infrastructure
