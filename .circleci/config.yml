@@ -46,7 +46,8 @@ jobs:
             # test if site exists
             if curl -s --head ${URL}
             then
-              return it works
+              echo it works
+              return 0
             else
               return 1
             fi
