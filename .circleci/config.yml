@@ -23,8 +23,8 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      # - add_ssh_keys:
-      #     fingerprints: ["69:7e:38:86:68:24:e7:81:f7:c3:2d:28:30:ea:eb:c5"]
+      - add_ssh_keys:
+          fingerprints: ["69:7e:38:86:68:24:e7:81:f7:c3:2d:28:30:ea:eb:c5"]
       - run: 
           name: Install Ansible
           command: |
@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook -i inventory.txt main-remote.yml --private-key cicd.pem
+            ansible-playbook main-remote.yml -i inventory.txt
 
 workflows:
   sharing-files:
