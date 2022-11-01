@@ -38,4 +38,4 @@ jobs:
 workflows:
   sharing-files:
     jobs:
-      - configure_infrastructure
+      - create_infrastructure
