@@ -32,7 +32,8 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook -i inventory main-remote.yml
+            chmod 400 cicd.pem
+            ansible-playbook -i inventory main-remote.yml --private-key cicd.pem
 
 
 workflows:
