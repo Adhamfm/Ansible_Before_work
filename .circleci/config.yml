@@ -5,18 +5,22 @@ default_docker: &default_docker
       - image: circleci/node:13.8.0
 
 jobs:
-  save_hello_world_output:
-    <<: *default_docker
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
     steps:
+      - checkout
       - run:
+          name: Create Cloudformation Stack
           command: |
-            echo every thing is working brothers dont worry
-      - run:
-          command: echo we failed my bois
-          when: on_fail
+            aws cloudformation deploy \
+                --template-file template.yml \
+                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+                --region us-east-1
+        
 
 
 workflows:
   sharing-files:
     jobs:
-      - save_hello_world_output
+      - create_infrastructure
