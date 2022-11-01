@@ -25,14 +25,14 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["69:7e:38:86:68:24:e7:81:f7:c3:2d:28:30:ea:eb:c5"]
-      - run: 
-          name: Install Ansible
-          command: |
-            apk add --update ansible
+      # - run: 
+      #     name: Install Ansible
+      #     command: |
+      #       apk add --update ansible
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook main-remote.yml -i inventory.txt --force-handlers
+            ansible-playbook main-remote.yml -i inventory.txt
 
 workflows:
   sharing-files:
